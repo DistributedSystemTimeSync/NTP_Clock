@@ -1,0 +1,12 @@
+{
+  "node_name": "node_b",
+  "initial_offset_ms": -100,
+  "drift_rate_ppm": 10,
+  "clock_adj": 1.0,
+  "clock_phase": 6,
+  "clock_max": 128.0,
+  "sync_interval": 5,
+  "log_dir": "logs",
+  "result_dir": "results",
+  "description": "Slow node: Running 100ms behind, natural drift +10ppm (runs fast)"
+}

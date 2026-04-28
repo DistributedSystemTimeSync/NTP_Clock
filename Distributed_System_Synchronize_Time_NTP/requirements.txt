@@ -1,0 +1,2 @@
+# No external dependencies for this project
+# Uses only Python standard library (socket, time, threading, etc.)

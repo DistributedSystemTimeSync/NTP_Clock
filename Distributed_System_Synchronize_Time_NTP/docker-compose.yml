@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  server_a:
+    build: .
+    container_name: ntp_server_a
+    ports:
+      - "123:123/udp"
+    volumes:
+      - ./logs:/app/logs
+      - ./results:/app/results
+      - ./configs:/app/configs
+      - ./src:/app/src
+    command: python main.py server
+    environment:
+      - NODE_TYPE=server
+      - CONFIG_FILE=configs/server_config.json
+    networks:
+      - ntp_network
+
+  node_b:
+    build: .
+    container_name: ntp_node_b
+    depends_on:
+      - server_a
+    volumes:
+      - ./logs:/app/logs
+      - ./results:/app/results
+      - ./configs:/app/configs
+      - ./src:/app/src
+    command: python main.py client node_b
+    environment:
+      - NODE_TYPE=client
+      - CONFIG_FILE=configs/node_b_config.json
+      - SERVER_HOST=server_a
+      - SERVER_PORT=123
+      - DURATION=180
+    networks:
+      - ntp_network
+
+  node_c:
+    build: .
+    container_name: ntp_node_c
+    depends_on:
+      - server_a
+    volumes:
+      - ./logs:/app/logs
+      - ./results:/app/results
+      - ./configs:/app/configs
+      - ./src:/app/src
+    command: python main.py client node_c
+    environment:
+      - NODE_TYPE=client
+      - CONFIG_FILE=configs/node_c_config.json
+      - SERVER_HOST=server_a
+      - SERVER_PORT=123
+      - DURATION=180
+    networks:
+      - ntp_network
+
+networks:
+  ntp_network:
+    driver: bridge
